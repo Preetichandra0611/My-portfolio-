@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preeti Chandra — Frontend Developer & UI/UX</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0e0e0e;
+    --surface: #161616;
+    --accent: #ff4d00;
+    --accent2: #ffd166;
+    --text: #f0ede8;
+    --muted: #888;
+    --border: #2a2a2a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    cursor: none;
+    overflow-x: hidden;
+  }
+
+  /* Custom Cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-follower {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.25s ease;
+    mix-blend-mode: difference;
+  }
+  a:hover ~ .cursor, button:hover ~ .cursor { transform: scale(2.5); }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    padding: 24px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 100;
+    background: linear-gradient(to bottom, rgba(14,14,14,0.95), transparent);
+    backdrop-filter: blur(2px);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 0 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 70% 50%, rgba(255,77,0,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 10% 80%, rgba(255,209,102,0.05) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(var(--border) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 80px 80px;
+    opacity: 0.3;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 800px; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(52px, 8vw, 96px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -3px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  h1 .accent { color: var(--accent); }
+  h1 .outline {
+    -webkit-text-stroke: 1.5px var(--text);
+    color: transparent;
+  }
+
+  .hero-sub {
+    margin-top: 32px;
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 480px;
+    line-height: 1.7;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-cta {
+    margin-top: 48px;
+    display: flex; gap: 16px; flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+  .btn {
+    padding: 14px 32px;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: none;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+  }
+  .btn-primary:hover { background: #ff6a2b; transform: translateY(-2px); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--text); transform: translateY(-2px); }
+
+  .hero-scroll {
+    position: absolute; bottom: 40px; left: 60px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+  .scroll-line {
+    width: 60px; height: 1px; background: var(--muted);
+    position: relative; overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute; left: -100%; top: 0;
+    width: 100%; height: 100%;
+    background: var(--accent);
+    animation: scrollLine 2s infinite;
+  }
+  @keyframes scrollLine { to { left: 100%; } }
+
+  .hero-stats {
+    position: absolute; right: 60px; bottom: 40px;
+    display: flex; gap: 48px;
+    animation: fadeUp 0.6s 0.5s ease both;
+  }
+  .stat { text-align: right; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .stat-num span { color: var(--accent); }
+  .stat-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+
+  /* Marquee */
+  .marquee-wrapper {
+    padding: 20px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .marquee {
+    display: flex; gap: 60px;
+    animation: marquee 20s linear infinite;
+    width: max-content;
+  }
+  .marquee-item {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+    display: flex; align-items: center; gap: 20px;
+  }
+  .marquee-item::after {
+    content: '✦';
+    color: var(--accent);
+    font-size: 10px;
+  }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* Section base */
+  section { padding: 120px 60px; }
+  .section-label {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+    margin-bottom: 60px;
+  }
+
+  /* Work */
+  #work { background: var(--bg); }
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+  }
+  .work-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    cursor: none;
+    transition: transform 0.3s ease, border-color 0.3s;
+  }
+  .work-card:hover { transform: translateY(-6px); border-color: var(--accent); }
+  .work-card:nth-child(1) { grid-column: span 7; }
+  .work-card:nth-child(2) { grid-column: span 5; }
+  .work-card:nth-child(3) { grid-column: span 4; }
+  .work-card:nth-child(4) { grid-column: span 8; }
+
+  .card-visual {
+    height: 260px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-visual svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  /* Visual themes */
+  .visual-1 { background: linear-gradient(135deg, #1a0a00 0%, #2d1000 100%); }
+  .visual-2 { background: linear-gradient(135deg, #0a0a1a 0%, #0d1520 100%); }
+  .visual-3 { background: linear-gradient(135deg, #0a1a0a 0%, #0d2010 100%); }
+  .visual-4 { background: linear-gradient(135deg, #1a0a1a 0%, #200d20 100%); }
+
+  .card-label {
+    position: absolute; top: 16px; left: 16px;
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    background: rgba(255,77,0,0.15);
+    border: 1px solid rgba(255,77,0,0.3);
+    color: var(--accent);
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+
+  .card-info { padding: 24px; }
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .card-desc { font-size: 13px; color: var(--muted); }
+  .card-arrow {
+    position: absolute; bottom: 24px; right: 24px;
+    width: 36px; height: 36px;
+    background: var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .work-card:hover .card-arrow { background: var(--accent); transform: translate(3px,-3px); }
+
+  /* About */
+  #about {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .about-visual {
+    aspect-ratio: 1;
+    max-width: 460px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .about-initials {
+    font-family: 'Syne', sans-serif;
+    font-size: 120px;
+    font-weight: 800;
+    color: var(--border);
+    line-height: 1;
+    user-select: none;
+  }
+  .about-initials span { color: var(--accent); }
+  .about-badge {
+    position: absolute; bottom: 24px; right: 24px;
+    background: var(--accent);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .about-text p { color: var(--muted); font-size: 16px; margin-bottom: 20px; line-height: 1.8; }
+  .about-text p strong { color: var(--text); }
+
+  .tools-grid {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin-top: 32px;
+  }
+  .tool-tag {
+    padding: 8px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+  .tool-tag:hover { border-color: var(--accent); color: var(--text); }
+
+  /* Skills */
+  #skills { background: var(--bg); }
+  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .skill-card {
+    background: var(--surface);
+    padding: 40px;
+    border: 1px solid var(--border);
+    transition: background 0.2s;
+    position: relative;
+  }
+  .skill-card:hover { background: #1d1d1d; }
+  .skill-icon {
+    font-size: 32px; margin-bottom: 20px;
+    display: block;
+  }
+  .skill-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .skill-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .skill-level {
+    position: absolute; top: 40px; right: 40px;
+    font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* Contact */
+  #contact {
+    background: var(--surface);
+    text-align: center;
+  }
+  .contact-inner { max-width: 600px; margin: 0 auto; }
+  .contact-email {
+    display: inline-block;
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(24px, 4vw, 42px);
+    font-weight: 800;
+    color: var(--text);
+    text-decoration: none;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 4px;
+    margin: 32px 0;
+    letter-spacing: -1px;
+    transition: color 0.2s;
+  }
+  .contact-email:hover { color: var(--accent); }
+  .social-links { display: flex; gap: 16px; justify-content: center; margin-top: 40px; }
+  .social-link {
+    width: 44px; height: 44px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    font-size: 16px;
+    transition: all 0.2s;
+    cursor: none;
+  }
+  .social-link:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+  /* Footer */
+  footer {
+    padding: 24px 60px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; color: var(--muted);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Intersection observer animations */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 0 24px; }
+    section { padding: 80px 24px; }
+    .hero-stats { display: none; }
+    .work-card:nth-child(n) { grid-column: span 12; }
+    .about-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 12px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="cursorFollower"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">P<span>.</span>Chandra</div>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="btn btn-primary" style="padding:10px 22px;font-size:13px;">Hire Me</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Available for Internship · 2025</div>
+    <h1>
+      Frontend<br>
+      <span class="accent">Dev &</span><br>
+      <span class="outline">UI/UX.</span>
+    </h1>
+    <p class="hero-sub">
+      BCA student with real corporate internship experience at Shahi Exports. I build clean, responsive interfaces using Angular, JavaScript, HTML5 & CSS3 — with a sharp eye for UI design.
+    </p>
+    <div class="hero-cta">
+      <a href="#work" class="btn btn-primary">View My Work →</a>
+      <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">3<span>+</span></div>
+      <div class="stat-label">Projects</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">1<span>+</span></div>
+      <div class="stat-label">Internship</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrapper">
+  <div class="marquee">
+    <span class="marquee-item">Angular</span>
+    <span class="marquee-item">JavaScript ES6+</span>
+    <span class="marquee-item">HTML5 & CSS3</span>
+    <span class="marquee-item">Responsive Design</span>
+    <span class="marquee-item">UI/UX Design</span>
+    <span class="marquee-item">Python</span>
+    <span class="marquee-item">VS Code</span>
+    <span class="marquee-item">GitHub</span>
+    <span class="marquee-item">Data Analytics</span>
+    <span class="marquee-item">Angular</span>
+    <span class="marquee-item">JavaScript ES6+</span>
+    <span class="marquee-item">HTML5 & CSS3</span>
+    <span class="marquee-item">Responsive Design</span>
+    <span class="marquee-item">UI/UX Design</span>
+    <span class="marquee-item">Python</span>
+    <span class="marquee-item">VS Code</span>
+    <span class="marquee-item">GitHub</span>
+    <span class="marquee-item">Data Analytics</span>
+  </div>
+</div>
+
+<!-- WORK -->
+<section id="work">
+  <div class="section-label">Selected Work</div>
+  <div class="section-title reveal">Projects that<br>prove the work.</div>
+
+  <div class="work-grid">
+    <!-- Card 1 -->
+    <div class="work-card reveal">
+      <div class="card-visual visual-2">
+        <svg viewBox="0 0 700 260" xmlns="http://www.w3.org/2000/svg">
+          <rect x="80" y="40" width="200" height="180" rx="10" fill="none" stroke="#4d9eff" stroke-width="1" opacity="0.4"/>
+          <rect x="95" y="55" width="170" height="110" rx="6" fill="#0d1520" stroke="#4d9eff" stroke-width="0.5" opacity="0.7"/>
+          <rect x="110" y="70" width="140" height="8" rx="4" fill="#4d9eff" opacity="0.5"/>
+          <rect x="110" y="86" width="90" height="6" rx="3" fill="#4d9eff" opacity="0.2"/>
+          <rect x="110" y="110" width="60" height="25" rx="5" fill="#4d9eff" opacity="0.3"/>
+          <rect x="110" y="143" width="40" height="6" rx="3" fill="#4d9eff" opacity="0.2"/>
+          <text x="490" y="150" text-anchor="middle" fill="#4d9eff" font-family="Syne,sans-serif" font-size="52" font-weight="800" opacity="0.08">PORTFOLIO</text>
+          <text x="490" y="145" text-anchor="middle" fill="none" stroke="#4d9eff" stroke-width="0.8" font-family="Syne,sans-serif" font-size="38" font-weight="800" opacity="0.25">PORTFOLIO</text>
+          <line x1="360" y1="50" x2="360" y2="210" stroke="#4d9eff" stroke-width="0.5" opacity="0.2"/>
+          <circle cx="560" cy="90" r="25" fill="none" stroke="#ffd166" stroke-width="0.5" opacity="0.4"/>
+        </svg>
+        <div class="card-label">HTML · CSS · JS</div>
+      </div>
+      <div class="card-info">
+        <div class="card-title">Personal Portfolio Website</div>
+        <div class="card-desc">Fully responsive portfolio — clean UI layout, semantic code, cross-browser compatible</div>
+      </div>
+      <div class="card-arrow">↗</div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="work-card reveal">
+      <div class="card-visual visual-3">
+        <svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+          <rect x="50" y="50" width="300" height="160" rx="8" fill="none" stroke="#4dff91" stroke-width="1" opacity="0.3"/>
+          <rect x="65" y="65" width="270" height="30" rx="4" fill="#4dff91" opacity="0.08"/>
+          <text x="200" y="85" text-anchor="middle" fill="#4dff91" font-family="Syne,sans-serif" font-size="11" font-weight="700" opacity="0.6" letter-spacing="2">STUDENT RESULT SYSTEM</text>
+          <rect x="65" y="105" width="80" height="8" rx="4" fill="#4dff91" opacity="0.3"/>
+          <rect x="65" y="120" width="270" height="1" fill="#4dff91" opacity="0.2"/>
+          <rect x="65" y="130" width="120" height="6" rx="3" fill="#4dff91" opacity="0.2"/>
+          <rect x="65" y="143" width="100" height="6" rx="3" fill="#4dff91" opacity="0.15"/>
+          <rect x="65" y="156" width="140" height="6" rx="3" fill="#4dff91" opacity="0.1"/>
+          <rect x="250" y="125" width="70" height="30" rx="6" fill="#4dff91" opacity="0.15" stroke="#4dff91" stroke-width="0.5"/>
+          <text x="285" y="144" text-anchor="middle" fill="#4dff91" font-family="Syne,sans-serif" font-size="10" opacity="0.7">SORT</text>
+        </svg>
+        <div class="card-label">Python · DSA</div>
+      </div>
+      <div class="card-info">
+        <div class="card-title">Student Result Management System</div>
+        <div class="card-desc">File-based system with Bubble, Selection & Insertion sort for student ranking & search</div>
+      </div>
+      <div class="card-arrow">↗</div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="work-card reveal">
+      <div class="card-visual visual-4">
+        <svg viewBox="0 0 350 260" xmlns="http://www.w3.org/2000/svg">
+          <text x="175" y="170" text-anchor="middle" fill="#c04dff" font-family="Syne,sans-serif" font-size="80" font-weight="800" opacity="0.06">ML</text>
+          <text x="175" y="160" text-anchor="middle" fill="none" stroke="#c04dff" stroke-width="0.8" font-family="Syne,sans-serif" font-size="56" font-weight="800" opacity="0.2">RISK</text>
+          <circle cx="175" cy="120" r="55" fill="none" stroke="#c04dff" stroke-width="0.5" opacity="0.3"/>
+          <circle cx="175" cy="120" r="35" fill="none" stroke="#ffd166" stroke-width="0.5" opacity="0.3"/>
+          <circle cx="175" cy="120" r="15" fill="#c04dff" opacity="0.15"/>
+          <line x1="80" y1="195" x2="270" y2="195" stroke="#c04dff" stroke-width="0.5" opacity="0.3"/>
+          <text x="80" y="215" fill="#c04dff" font-family="Syne,sans-serif" font-size="9" opacity="0.5" letter-spacing="3">PYTHON · ML · DATA ANALYTICS</text>
+        </svg>
+        <div class="card-label">ML · Python</div>
+      </div>
+      <div class="card-info">
+        <div class="card-title">Credit Card Delinquency Prediction</div>
+        <div class="card-desc">ML model for credit risk — data preprocessing, feature selection, risk indicator analysis</div>
+      </div>
+      <div class="card-arrow">↗</div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="work-card reveal">
+      <div class="card-visual visual-1">
+        <svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
+          <rect x="60" y="50" width="480" height="160" rx="10" fill="none" stroke="#ff4d00" stroke-width="0.8" opacity="0.3"/>
+          <rect x="80" y="70" width="180" height="120" rx="6" fill="#1a0a00" stroke="#ff4d00" stroke-width="0.5" opacity="0.6"/>
+          <text x="170" y="118" text-anchor="middle" fill="#ff4d00" font-family="Syne,sans-serif" font-size="13" font-weight="700" opacity="0.6">&lt;div&gt;</text>
+          <text x="170" y="135" text-anchor="middle" fill="#ffd166" font-family="Syne,sans-serif" font-size="10" opacity="0.5">  class="component"</text>
+          <text x="170" y="150" text-anchor="middle" fill="#ff4d00" font-family="Syne,sans-serif" font-size="13" font-weight="700" opacity="0.6">&lt;/div&gt;</text>
+          <rect x="280" y="70" width="240" height="50" rx="6" fill="#1a0a00" stroke="#ff4d00" stroke-width="0.5" opacity="0.4"/>
+          <text x="400" y="100" text-anchor="middle" fill="#ff4d00" font-family="Syne,sans-serif" font-size="11" opacity="0.6" letter-spacing="1">SHAHI EXPORTS · ANGULAR</text>
+          <rect x="280" y="135" width="110" height="55" rx="6" fill="#1a0a00" stroke="#ffd166" stroke-width="0.5" opacity="0.4"/>
+          <rect x="400" y="135" width="120" height="55" rx="6" fill="#1a0a00" stroke="#ff4d00" stroke-width="0.5" opacity="0.4"/>
+          <text x="335" y="167" text-anchor="middle" fill="#ffd166" font-family="Syne,sans-serif" font-size="10" opacity="0.6">UI Components</text>
+          <text x="460" y="167" text-anchor="middle" fill="#ff4d00" font-family="Syne,sans-serif" font-size="10" opacity="0.6">Live Projects</text>
+        </svg>
+        <div class="card-label">Internship · Angular</div>
+      </div>
+      <div class="card-info">
+        <div class="card-title">Shahi Exports — IT Internship</div>
+        <div class="card-desc">Built UI components in Angular + JS, responsive layouts, cross-browser rendering in a live corporate environment</div>
+      </div>
+      <div class="card-arrow">↗</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual">
+      <div class="about-initials">P<span>.</span></div>
+      <div class="about-badge">Open to Work ✓</div>
+    </div>
+    <div class="about-text">
+      <div class="section-label">About Me</div>
+      <div class="section-title reveal" style="margin-bottom:24px">Hi, I'm<br>Preeti.</div>
+      <p>I'm a <strong>BCA 2nd year student at MDU Rohtak</strong> with hands-on corporate experience from my internship at <strong>Shahi Exports Pvt. Ltd.</strong> — one of India's largest garment exporters.</p>
+      <p>I build <strong>clean, responsive UIs</strong> using Angular, JavaScript, HTML5 & CSS3. I'm not just a student with projects — I've worked on <strong>live production code</strong> in a real IT department.</p>
+      <p>Currently based in <strong>Faridabad, Haryana</strong>. Looking for a frontend or web dev internship where I can contribute fast and grow even faster.</p>
+      <div class="tools-grid">
+        <span class="tool-tag">Angular</span>
+        <span class="tool-tag">JavaScript ES6+</span>
+        <span class="tool-tag">HTML5</span>
+        <span class="tool-tag">CSS3</span>
+        <span class="tool-tag">Python</span>
+        <span class="tool-tag">C / C++</span>
+        <span class="tool-tag">VS Code</span>
+        <span class="tool-tag">GitHub</span>
+        <span class="tool-tag">MS Excel</span>
+        <span class="tool-tag">Google Colab</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">What I Do</div>
+  <div class="section-title reveal">Core Skills.</div>
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <span class="skill-icon">⚡</span>
+      <span class="skill-level">Strong</span>
+      <div class="skill-name">Frontend Development</div>
+      <div class="skill-desc">Angular, JavaScript ES6+, HTML5, CSS3. Responsive layouts, cross-browser compatibility, and component-based architecture from real corporate work.</div>
+    </div>
+    <div class="skill-card reveal">
+      <span class="skill-icon">🎨</span>
+      <span class="skill-level">Proficient</span>
+      <div class="skill-name">UI/UX Design</div>
+      <div class="skill-desc">User interface design, UX fundamentals, semantic markup. Clean visual hierarchy with a developer's eye for what actually gets built.</div>
+    </div>
+    <div class="skill-card reveal">
+      <span class="skill-icon">🐍</span>
+      <span class="skill-level">Proficient</span>
+      <div class="skill-name">Python & Data</div>
+      <div class="skill-desc">Python for scripting and ML projects. Built a credit delinquency prediction model using Scikit-learn on Google Colab with data preprocessing and feature engineering.</div>
+    </div>
+    <div class="skill-card reveal">
+      <span class="skill-icon">🧠</span>
+      <span class="skill-level">Growing</span>
+      <div class="skill-name">CS Fundamentals</div>
+      <div class="skill-desc">Data Structures, OOP, Computer Networks, Digital Electronics. Strong academic base with practical applications in project work.</div>
+    </div>
+    <div class="skill-card reveal">
+      <span class="skill-icon">🛠️</span>
+      <span class="skill-level">Proficient</span>
+      <div class="skill-name">Dev Tools</div>
+      <div class="skill-desc">VS Code, GitHub (basics), MS Excel (Advanced), MS Office Suite, Google Colab. Used in both academic and live corporate environments.</div>
+    </div>
+    <div class="skill-card reveal">
+      <span class="skill-icon">🤝</span>
+      <span class="skill-level">Proven</span>
+      <div class="skill-name">Team & Corporate Work</div>
+      <div class="skill-desc">Real experience collaborating in a corporate IT team at Shahi Exports. On-time delivery, professional workflows, live project updates.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-label">Let's Connect</div>
+    <div class="section-title reveal" style="margin-bottom:16px">Got an opportunity?<br>Let's talk.</div>
+    <p style="color:var(--muted);font-size:15px;">I'm actively looking for graphic design internships. Fast learner, hard worker, no drama.</p>
+    <a href="mailto:pchandra0611@gmail.com" class="contact-email">pchandra0611@gmail.com</a>
+    <p style="color:var(--muted);font-size:13px;margin-top:8px;">📍 Faridabad, Haryana &nbsp;·&nbsp; 📞 +91-9650759284</p>
+    <div class="social-links">
+      <a href="#" class="social-link" title="Behance">Be</a>
+      <a href="#" class="social-link" title="Dribbble">Dr</a>
+      <a href="https://linkedin.com/in/preeti-chandra-633927328" class="social-link" title="LinkedIn">in</a>
+      <a href="#" class="social-link" title="Instagram">ig</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Preeti Chandra — Frontend Developer & UI/UX</span>
+  <span style="color:var(--accent)">Available for Internship ✦</span>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const follower = document.getElementById('cursorFollower');
+  let mx = 0, my = 0, fx = 0, fy = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx - 6 + 'px';
+    cursor.style.top = my - 6 + 'px';
+  });
+
+  function animateFollower() {
+    fx += (mx - fx) * 0.12;
+    fy += (my - fy) * 0.12;
+    follower.style.left = fx - 18 + 'px';
+    follower.style.top = fy - 18 + 'px';
+    requestAnimationFrame(animateFollower);
+  }
+  animateFollower();
+
+  // Hover states
+  document.querySelectorAll('a, button, .work-card, .skill-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(2.5)'; follower.style.transform = 'scale(1.5)'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; follower.style.transform = 'scale(1)'; });
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
